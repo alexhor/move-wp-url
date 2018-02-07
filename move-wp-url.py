@@ -4,27 +4,27 @@ def replace_sql(content, orig_url, new_url, orig_path, new_path, https, www):
     """replace an url with a new url in the given string
 
     >>> content = open("test.sql", "r").read()
-    >>> print(replace_sql(content, "uscfr.de", "uscfr.h-software.de", "/www.uscfr.de", "/var/www/vhosts/h-software.de/uscfr.h-software.de", True, False))
-    https://uscfr.h-software.de
-    https://uscfr.h-software.de
+    >>> print(replace_sql(content, "test.de", "test.h-software.de", "/www.test.de", "/var/www/vhosts/h-software.de/test.h-software.de", True, False))
+    https://test.h-software.de
+    https://test.h-software.de
     <BLANKLINE>
-    https://uscfr.h-software.de
-    https://uscfr.h-software.de
+    https://test.h-software.de
+    https://test.h-software.de
     <BLANKLINE>
-    /var/www/vhosts/h-software.de/uscfr.h-software.de/wp-content/uploads/2017/05/Eckert_2012-150x150.jpg
-    \\\\/var\\\\/www\\\\/vhosts\\\\/h-software.de\\\\/uscfr.h-software.de\\\\/wp-content\\\\/uploads\\\\/2017\\\\/05\\\\/Eckert_2012-150x150.jpg
+    /var/www/vhosts/h-software.de/test.h-software.de/wp-content/uploads/2017/05/Eckert_2012-150x150.jpg
+    \\\\/var\\\\/www\\\\/vhosts\\\\/h-software.de\\\\/test.h-software.de\\\\/wp-content\\\\/uploads\\\\/2017\\\\/05\\\\/Eckert_2012-150x150.jpg
     <BLANKLINE>
-    https:\\\\/\\\\/uscfr.h-software.de
-    https:\\\\/\\\\/uscfr.h-software.de
+    https:\\\\/\\\\/test.h-software.de
+    https:\\\\/\\\\/test.h-software.de
     <BLANKLINE>
-    https:\\\\/\\\\/uscfr.h-software.de
-    https:\\\\/\\\\/uscfr.h-software.de
+    https:\\\\/\\\\/test.h-software.de
+    https:\\\\/\\\\/test.h-software.de
     <BLANKLINE>
-    https%3A%2F%2Fuscfr.h-software.de
-    https%3A%2F%2Fuscfr.h-software.de
+    https%3A%2F%2Ftest.h-software.de
+    https%3A%2F%2Ftest.h-software.de
     <BLANKLINE>
-    https%3A%2F%2Fuscfr.h-software.de
-    https%3A%2F%2Fuscfr.h-software.de
+    https%3A%2F%2Ftest.h-software.de
+    https%3A%2F%2Ftest.h-software.de
     """
     # convert all http to https and strip a possible www
     content = regex.sub(r"http://(?:www.)?" + orig_url, "https://" + orig_url, content)
