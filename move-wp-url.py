@@ -7,41 +7,55 @@ def replace_sql(content, orig_url, new_url, orig_path, new_path, https, www):
     >>> print(replace_sql(content, "test.de", "test.h-software.de", "/www.test.de", "/var/www/vhosts/h-software.de/test.h-software.de", True, False))
     https://test.h-software.de
     https://test.h-software.de
+    https://test.h-software.de
+    https://test.h-software.de
     <BLANKLINE>
+    https://test.h-software.de
+    https://test.h-software.de
     https://test.h-software.de
     https://test.h-software.de
     <BLANKLINE>
     /var/www/vhosts/h-software.de/test.h-software.de/wp-content/uploads/2017/05/Eckert_2012-150x150.jpg
+    /var/www/vhosts/h-software.de/test.h-software.de/wp-content/uploads/2017/05/Eckert_2012-150x150.jpg
+    \\\\/var\\\\/www\\\\/vhosts\\\\/h-software.de\\\\/test.h-software.de\\\\/wp-content\\\\/uploads\\\\/2017\\\\/05\\\\/Eckert_2012-150x150.jpg
     \\\\/var\\\\/www\\\\/vhosts\\\\/h-software.de\\\\/test.h-software.de\\\\/wp-content\\\\/uploads\\\\/2017\\\\/05\\\\/Eckert_2012-150x150.jpg
     <BLANKLINE>
     https:\\\\/\\\\/test.h-software.de
     https:\\\\/\\\\/test.h-software.de
+    https:\\\\/\\\\/test.h-software.de
+    https:\\\\/\\\\/test.h-software.de
     <BLANKLINE>
+    https:\\\\/\\\\/test.h-software.de
+    https:\\\\/\\\\/test.h-software.de
     https:\\\\/\\\\/test.h-software.de
     https:\\\\/\\\\/test.h-software.de
     <BLANKLINE>
     https%3A%2F%2Ftest.h-software.de
     https%3A%2F%2Ftest.h-software.de
+    https%3A%2F%2Ftest.h-software.de
+    https%3A%2F%2Ftest.h-software.de
     <BLANKLINE>
+    https%3A%2F%2Ftest.h-software.de
+    https%3A%2F%2Ftest.h-software.de
     https%3A%2F%2Ftest.h-software.de
     https%3A%2F%2Ftest.h-software.de
     """
     # convert all http to https and strip a possible www
-    content = regex.sub(r"http://(?:www.)?" + orig_url, "https://" + orig_url, content)
-    content = regex.sub(r"http:\\\\/\\\\/(?:www.)?" + orig_url, "https:\\\\\\\\/\\\\\\\\/" + orig_url, content)
-    content = regex.sub(r"http%3A%2F%2F(?:www.)?" + orig_url, "https%3A%2F%2F" + orig_url, content)
+    content = regex.sub(r"http://(?:www.)?" + orig_url, "https://" + orig_url, content, flags=regex.IGNORECASE)
+    content = regex.sub(r"http:\\\\/\\\\/(?:www.)?" + orig_url, "https:\\\\\\\\/\\\\\\\\/" + orig_url, content, flags=regex.IGNORECASE)
+    content = regex.sub(r"http%3A%2F%2F(?:www.)?" + orig_url, "https%3A%2F%2F" + orig_url, content, flags=regex.IGNORECASE)
 
     # strip all remaining www from the original url
-    content = regex.sub(r"https://www." + orig_url, r"https://" + orig_url, content)
-    content = regex.sub(r"https:\\\\/\\\\/www." + orig_url, "https:\\\\\\\\/\\\\\\\\/" + orig_url, content)
-    content = regex.sub(r"https%3A%2F%2Fwww." + orig_url, "https%3A%2F%2F" + orig_url, content)
+    content = regex.sub(r"https://www." + orig_url, r"https://" + orig_url, content, flags=regex.IGNORECASE)
+    content = regex.sub(r"https:\\\\/\\\\/www." + orig_url, "https:\\\\\\\\/\\\\\\\\/" + orig_url, content, flags=regex.IGNORECASE)
+    content = regex.sub(r"https%3A%2F%2Fwww." + orig_url, "https%3A%2F%2F" + orig_url, content, flags=regex.IGNORECASE)
     
     # replace directory names
     if orig_path != False and new_path != False:
         escaped_orig_path =regex.sub(r"/", r"\\\\\\\\/", orig_path)
         escaped_new_path =regex.sub(r"/", r"\\\\\\\\/", new_path)
-        content = regex.sub(r"(?<!https:/|https:\\\\/\\\\)" + escaped_orig_path, escaped_new_path, content)
-        content = regex.sub(r"(?<!https:/|https:\\\\/\\\\)" + orig_path, new_path, content)
+        content = regex.sub(r"(?<!https:/|https:\\\\/\\\\)" + escaped_orig_path, escaped_new_path, content, flags=regex.IGNORECASE)
+        content = regex.sub(r"(?<!https:/|https:\\\\/\\\\)" + orig_path, new_path, content, flags=regex.IGNORECASE)
 
     # check which protocol to use for the new url
     if https:
@@ -56,15 +70,15 @@ def replace_sql(content, orig_url, new_url, orig_path, new_path, https, www):
         www = ""
     
     # replace url names (new_url should have www)
-    content = regex.sub(r"https://" + orig_url, "" + protocol + "://" + www + new_url, content)
-    content = regex.sub(r"https:\\\\/\\\\/" + orig_url, "" + protocol + ":\\\\\\\\/\\\\\\\\/" + www + new_url, content)
-    content = regex.sub(r"https%3A%2F%2F" + orig_url, "" + protocol + "%3A%2F%2F" + www + new_url, content)
+    content = regex.sub(r"https://" + orig_url, "" + protocol + "://" + www + new_url, content, flags=regex.IGNORECASE)
+    content = regex.sub(r"https:\\\\/\\\\/" + orig_url, "" + protocol + ":\\\\\\\\/\\\\\\\\/" + www + new_url, content, flags=regex.IGNORECASE)
+    content = regex.sub(r"https%3A%2F%2F" + orig_url, "" + protocol + "%3A%2F%2F" + www + new_url, content, flags=regex.IGNORECASE)
 
     # remove all remaining www.
-    content = regex.sub(r"www." + orig_url, orig_url, content)
+    content = regex.sub(r"www." + orig_url, orig_url, content, flags=regex.IGNORECASE)
     
     # replace all remaining matches literaly
-    content = regex.sub(r"" + orig_url, www + new_url, content)
+    #content = regex.sub(r"" + orig_url, www + new_url, content, flags=regex.IGNORECASE)
 
     # return the processed content
     return content
@@ -100,15 +114,17 @@ def main():
             continue
         # get all sql files
         if(file[-4:] == '.sql'):
-            # load the files content
-            file_content = open(file, "r", encoding="utf-8").read()
-            # replace the url
-            new_content = replace_sql(file_content, orig_url, new_url, orig_path, new_path, https, www)
-            # save the new sql expression to a new file
-            new_file = open("output/" + file, "w", encoding="utf-8")
-            new_file.write(new_content)
-            new_file.close()
-
+            # open file for reading
+            read = open(file, "r", encoding="utf-8")
+            # open target file
+            write = open("output/" + file, "w", encoding="utf-8")
+            # relad every line
+            for line in read:
+                new_line = replace_sql(line, orig_url, new_url, orig_path, new_path, https, www)
+                write.write(new_line)
+            # close files
+            write.close()
+            read.close()
 
 if __name__ == "__main__":
     import doctest
